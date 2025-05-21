@@ -37,3 +37,17 @@ In this test, I intentionally introduced a mismatch between the server and clien
 ![Image](https://github.com/user-attachments/assets/5427f82e-13c7-4d58-8dcb-bc2434ba9e51)
 
 In this scenario, both the server and the client were configured to use the same WebSocket port: 8080. As shown in the screenshots, the server successfully started listening on port 8080, and the client was able to establish a connection immediately. Upon connection, the client received the expected welcome message from the server. This successful interaction confirms that WebSocket communication works correctly only when both sides—the client and the server—are aligned on the same host and port. Unlike the previous test with mismatched ports (where the client attempted to connect to port 8080 while the server was still on 2000), having matching ports ensures the TCP handshake can occur, allowing the WebSocket protocol to negotiate and establish a two-way communication channel.
+
+### Small changes, add IP and Port
+
+**Server**
+
+![Image](https://github.com/user-attachments/assets/cfe44e28-8535-46d4-9323-a193b9351858)
+
+**Client**
+
+![Image](https://github.com/user-attachments/assets/a58bafdc-833d-4b27-807a-61aad4b5f268)
+
+![Image](https://github.com/user-attachments/assets/b204d300-8ac3-48da-aa08-09e6b7b893a4)
+
+In this stage of the experiment, a personalization was added on the client side by modifying the display format to show "From Faizi's computer server: ...". This change was made in client.rs, where incoming messages are printed. At the same time, in server.rs, the line bcast_tx.send(format!("{addr} : {text}"))?; was added. This ensures that each message includes the sender’s IP address and port before being broadcast. Together, these changes allow clients to see clearly who sent each message, with both a human-readable prefix and technical connection details for identification.
